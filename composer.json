@@ -2,7 +2,6 @@
     "name": "fasano/forms-bundle",
     "description": "Generate Symfony forms from your DTOs.",
     "type": "symfony-bundle",
-    "version": "1.0.0",
     "license": "MIT",
     "authors": [
         {
@@ -10,24 +9,35 @@
             "email": "fasano.nm@gmail.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../contracts/primitives"
-        }
-    ],
     "require": {
-        "symfony/http-kernel": "7.3",
-        "symfony/dependency-injection": "7.3",
-        "symfony/form": "7.3",
-        "symfony/routing": "7.3",
-        "symfony/validator": "7.3",
-        "symfony/config": "7.3",
-        "contract/primitives": "1.0"
+        "symfony/http-kernel": "^8.0",
+        "symfony/dependency-injection": "^8.0",
+        "symfony/form": "^8.0",
+        "symfony/routing": "^8.0",
+        "symfony/validator": "^8.0",
+        "symfony/config": "^8.0",
+        "fasano/phprimitives": "^1.0",
+        "fasano/typedocs": "^1.0",
+        "symfony/intl": "^8.0"
     },
     "autoload": {
         "psr-4": {
             "Fasano\\FormsBundle\\": "src/"
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^13.0",
+        "symfony/yaml": "^8.0",
+        "twig/twig": "^3.24",
+        "symfony/twig-bridge": "^8.0",
+        "symfony/translation": "^8.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fasano\\FormsBundle\\Tests\\": "tests/"
+        }
+    },
+    "suggest": {                                                                                        
+        "symfony/mime": "Required when using Assert\\File with mimeTypes or Assert\\Image constraints." 
     }
 }

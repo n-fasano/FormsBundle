@@ -1,0 +1,228 @@
+services:
+  _defaults:
+      public: false
+
+  fasano_forms.form_type_factory:
+      class: Fasano\FormsBundle\FormTypeFactory
+      public: true
+      autowire: true
+      arguments:
+          $enableCache: '%env(bool:not:APP_DEBUG)%'
+
+  # --- Core ---
+
+  _instanceof:
+      Fasano\FormsBundle\Configurator\Constraint\ConstraintConfigurator:
+          tags: ['forms.constraint_configurator']
+      Fasano\FormsBundle\Configurator\BundleAttribute\BundleAttributeConfigurator:
+          tags: ['forms.bundle_attribute_configurator']
+      Fasano\FormsBundle\Configurator\Typedoc\TypedocConfigurator:
+          tags: ['forms.typedoc_configurator']
+      Fasano\FormsBundle\Field\FieldConfigurator:
+          tags: [{ name: 'forms.field_configurator', priority: 0 }]
+
+  fasano_forms.form_type_naming_strategy:
+      class: Fasano\FormsBundle\Form\FormTypeNamingStrategy
+      arguments:
+          $namespace: 'Cache\Forms'
+          $directory: '%kernel.cache_dir%/forms/'
+
+  Fasano\FormsBundle\Form\FormTypeNamingStrategy: '@fasano_forms.form_type_naming_strategy'
+
+  fasano_forms.form_type_generator_factory:
+      class: Fasano\FormsBundle\Form\FormTypeGeneratorFactory
+      autowire: true
+      arguments:
+          $fieldConfigurators: !tagged_iterator { tag: 'forms.field_configurator', default_index_method: null }
+
+  Fasano\FormsBundle\Form\FormTypeGeneratorFactory: '@fasano_forms.form_type_generator_factory'
+
+  Fasano\FormsBundle\FormTypeFactory: '@fasano_forms.form_type_factory'
+
+  fasano_forms.form_value_resolver:
+      class: Fasano\FormsBundle\Http\FormValueResolver
+      autowire: true
+      tags:
+          - { name: 'controller.argument_value_resolver' }
+          - { name: 'kernel.event_subscriber' }
+
+  # --- Field configurator pipeline ---
+
+  fasano_forms.configurator.typesystem:
+      class: Fasano\FormsBundle\Configurator\TypesystemConfigurator
+      tags: [{ name: 'forms.field_configurator', priority: 30 }]
+
+  fasano_forms.configurator.constraints:
+      class: Fasano\FormsBundle\Configurator\ConstraintsConfigurator
+      tags: [{ name: 'forms.field_configurator', priority: 20 }]
+      arguments:
+          $constraintConfigurators: !tagged_iterator forms.constraint_configurator
+
+  fasano_forms.configurator.typedocs:
+      class: Fasano\FormsBundle\Configurator\TypedocsConfigurator
+      tags: [{ name: 'forms.field_configurator', priority: 10 }]
+      arguments:
+          $configurators: !tagged_iterator forms.typedoc_configurator
+
+  fasano_forms.configurator.forms_bundle:
+      class: Fasano\FormsBundle\Configurator\FormsBundleConfigurator
+      tags: [{ name: 'forms.field_configurator', priority: -10 }]
+      arguments:
+          $configurators: !tagged_iterator forms.bundle_attribute_configurator
+
+  # --- Constraint configurators ---
+
+  fasano_forms.constraint.bic:
+      class: Fasano\FormsBundle\Configurator\Constraint\BicConfigurator
+
+  fasano_forms.constraint.card_scheme:
+      class: Fasano\FormsBundle\Configurator\Constraint\CardSchemeConfigurator
+
+  fasano_forms.constraint.cidr:
+      class: Fasano\FormsBundle\Configurator\Constraint\CidrConfigurator
+
+  fasano_forms.constraint.choice:
+      class: Fasano\FormsBundle\Configurator\Constraint\ChoiceConfigurator
+
+  fasano_forms.constraint.country:
+      class: Fasano\FormsBundle\Configurator\Constraint\CountryConfigurator
+
+  fasano_forms.constraint.currency:
+      class: Fasano\FormsBundle\Configurator\Constraint\CurrencyConfigurator
+
+  fasano_forms.constraint.date:
+      class: Fasano\FormsBundle\Configurator\Constraint\DateConfigurator
+
+  fasano_forms.constraint.date_time:
+      class: Fasano\FormsBundle\Configurator\Constraint\DateTimeConfigurator
+
+  fasano_forms.constraint.divisible_by:
+      class: Fasano\FormsBundle\Configurator\Constraint\DivisibleByConfigurator
+
+  fasano_forms.constraint.email:
+      class: Fasano\FormsBundle\Configurator\Constraint\EmailConfigurator
+
+  fasano_forms.constraint.file:
+      class: Fasano\FormsBundle\Configurator\Constraint\FileConfigurator
+
+  fasano_forms.constraint.greater_than:
+      class: Fasano\FormsBundle\Configurator\Constraint\GreaterThanConfigurator
+
+  fasano_forms.constraint.greater_than_or_equal:
+      class: Fasano\FormsBundle\Configurator\Constraint\GreaterThanOrEqualConfigurator
+
+  fasano_forms.constraint.hostname:
+      class: Fasano\FormsBundle\Configurator\Constraint\HostnameConfigurator
+
+  fasano_forms.constraint.iban:
+      class: Fasano\FormsBundle\Configurator\Constraint\IbanConfigurator
+
+  fasano_forms.constraint.image:
+      class: Fasano\FormsBundle\Configurator\Constraint\ImageConfigurator
+
+  fasano_forms.constraint.ip:
+      class: Fasano\FormsBundle\Configurator\Constraint\IpConfigurator
+
+  fasano_forms.constraint.isbn:
+      class: Fasano\FormsBundle\Configurator\Constraint\IsbnConfigurator
+
+  fasano_forms.constraint.is_true:
+      class: Fasano\FormsBundle\Configurator\Constraint\IsTrueConfigurator
+
+  fasano_forms.constraint.json:
+      class: Fasano\FormsBundle\Configurator\Constraint\JsonConfigurator
+
+  fasano_forms.constraint.language:
+      class: Fasano\FormsBundle\Configurator\Constraint\LanguageConfigurator
+
+  fasano_forms.constraint.length:
+      class: Fasano\FormsBundle\Configurator\Constraint\LengthConfigurator
+
+  fasano_forms.constraint.less_than:
+      class: Fasano\FormsBundle\Configurator\Constraint\LessThanConfigurator
+
+  fasano_forms.constraint.less_than_or_equal:
+      class: Fasano\FormsBundle\Configurator\Constraint\LessThanOrEqualConfigurator
+
+  fasano_forms.constraint.locale:
+      class: Fasano\FormsBundle\Configurator\Constraint\LocaleConfigurator
+
+  fasano_forms.constraint.mac_address:
+      class: Fasano\FormsBundle\Configurator\Constraint\MacAddressConfigurator
+
+  fasano_forms.constraint.negative:
+      class: Fasano\FormsBundle\Configurator\Constraint\NegativeConfigurator
+
+  fasano_forms.constraint.negative_or_zero:
+      class: Fasano\FormsBundle\Configurator\Constraint\NegativeOrZeroConfigurator
+
+  fasano_forms.constraint.not_blank:
+      class: Fasano\FormsBundle\Configurator\Constraint\NotBlankConfigurator
+
+  fasano_forms.constraint.not_compromised_password:
+      class: Fasano\FormsBundle\Configurator\Constraint\NotCompromisedPasswordConfigurator
+
+  fasano_forms.constraint.not_null:
+      class: Fasano\FormsBundle\Configurator\Constraint\NotNullConfigurator
+
+  fasano_forms.constraint.password_strength:
+      class: Fasano\FormsBundle\Configurator\Constraint\PasswordStrengthConfigurator
+
+  fasano_forms.constraint.positive:
+      class: Fasano\FormsBundle\Configurator\Constraint\PositiveConfigurator
+
+  fasano_forms.constraint.positive_or_zero:
+      class: Fasano\FormsBundle\Configurator\Constraint\PositiveOrZeroConfigurator
+
+  fasano_forms.constraint.range:
+      class: Fasano\FormsBundle\Configurator\Constraint\RangeConfigurator
+
+  fasano_forms.constraint.regex:
+      class: Fasano\FormsBundle\Configurator\Constraint\RegexConfigurator
+
+  fasano_forms.constraint.time:
+      class: Fasano\FormsBundle\Configurator\Constraint\TimeConfigurator
+
+  fasano_forms.constraint.timezone:
+      class: Fasano\FormsBundle\Configurator\Constraint\TimezoneConfigurator
+
+  fasano_forms.constraint.ulid:
+      class: Fasano\FormsBundle\Configurator\Constraint\UlidConfigurator
+
+  fasano_forms.constraint.url:
+      class: Fasano\FormsBundle\Configurator\Constraint\UrlConfigurator
+
+  fasano_forms.constraint.uuid:
+      class: Fasano\FormsBundle\Configurator\Constraint\UuidConfigurator
+
+  # --- Bundle attribute configurators ---
+
+  fasano_forms.bundle_attribute.attributes:
+      class: Fasano\FormsBundle\Configurator\BundleAttribute\AttributesConfigurator
+
+  fasano_forms.bundle_attribute.entry_type:
+      class: Fasano\FormsBundle\Configurator\BundleAttribute\EntryTypeConfigurator
+
+  fasano_forms.bundle_attribute.name:
+      class: Fasano\FormsBundle\Configurator\BundleAttribute\NameConfigurator
+
+  fasano_forms.bundle_attribute.opt_group:
+      class: Fasano\FormsBundle\Configurator\BundleAttribute\OptGroupConfigurator
+      autowire: true
+
+  fasano_forms.bundle_attribute.options:
+      class: Fasano\FormsBundle\Configurator\BundleAttribute\OptionsConfigurator
+
+  fasano_forms.bundle_attribute.type:
+      class: Fasano\FormsBundle\Configurator\BundleAttribute\TypeConfigurator
+
+  # --- Typedoc configurators ---
+
+  fasano_forms.typedoc.description:
+      class: Fasano\FormsBundle\Configurator\Typedoc\DescriptionConfigurator
+
+  fasano_forms.typedoc.example:
+      class: Fasano\FormsBundle\Configurator\Typedoc\ExampleConfigurator
+
+  fasano_forms.typedoc.name:
+      class: Fasano\FormsBundle\Configurator\Typedoc\NameConfigurator

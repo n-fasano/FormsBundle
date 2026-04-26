@@ -1,0 +1,1 @@
+I got tired of writing FormTypes that just repeated my type hints and constraints, so I built a bundle that generates them automatically

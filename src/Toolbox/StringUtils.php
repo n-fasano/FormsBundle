@@ -1,18 +1,11 @@
 <?php
 
-// declare(strict_types=1);
+declare(strict_types=1);
 
 namespace Fasano\FormsBundle\Toolbox;
 
 class StringUtils
 {
-    public static function isLengthBetween(string $subject, int $min, int $max): bool
-    {
-        $length = strlen($subject);
-
-        return $min <= $length && $length <= $max;
-    }
-
     public static function toTitleCase(string $input): string
     {
         // Replace all non-alphabetic characters with a space

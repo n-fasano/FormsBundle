@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Fasano\FormsBundle\Reflection;
 
 use ReflectionNamedType;
@@ -13,7 +15,7 @@ final class UntypedPropertyType extends ReflectionNamedType
 
     public function isBuiltin(): bool
     {
-        return false;
+        return true;
     }
 
     public function allowsNull(): bool

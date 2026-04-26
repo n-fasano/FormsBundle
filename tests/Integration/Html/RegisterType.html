@@ -1,0 +1,17 @@
+<form name="register" method="post" action="/example">
+  <div id="register">
+    <div>
+      <label for="register_email" class="required">Email</label>
+      <input type="email" id="register_email" name="register[email]" required="required" placeholder="john.doe@example.com" aria-describedby="register_email_help"/>
+      <div id="register_email_help" class="help-text">An email address</div>
+    </div>
+    <div>
+      <label for="register_password" class="required">Password</label>
+      <input type="password" id="register_password" name="register[password]" required="required" placeholder="$0O7b#%FWA#Nezxv" aria-describedby="register_password_help"/>
+      <div id="register_password_help" class="help-text">A password with at least 1 uppercase, 1 lowercase, and 1 special character.</div>
+    </div>
+    <div>
+      <button type="submit" id="register_submit" name="register[submit]">Register</button>
+    </div>
+  </div>
+</form>

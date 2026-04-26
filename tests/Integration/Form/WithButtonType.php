@@ -1,0 +1,54 @@
+<?php
+
+namespace Fasano\FormsBundle\Tests\Integration\Cases;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class WithButtonType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add(
+                'submit',
+                \Symfony\Component\Form\Extension\Core\Type\SubmitType::class,
+                array (
+                  'label' => 'Submit',
+                ),
+            );
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults(
+            array (
+              'data_class' => 'Fasano\\FormsBundle\\Tests\\Integration\\Cases\\WithButton',
+              'constraints' => 
+              array (
+                0 => new \Symfony\Component\Validator\Constraints\Valid(),
+              ),
+              'empty_data' => function (FormInterface $form) {
+                try {
+                    return new \Fasano\FormsBundle\Tests\Integration\Cases\WithButton(...array_values(array_map(
+                        fn (FormInterface $child) => $child->getData(),
+                        $form->all(),
+                    )));
+                } catch (\InvalidArgumentException $e) {
+                    throw new \Symfony\Component\Form\Exception\TransformationFailedException(
+                        message: $e->getMessage(),
+                        previous: $e,
+                    );
+                } catch (\Throwable $e) {
+                    throw new \Symfony\Component\Form\Exception\TransformationFailedException(
+                        message: 'Invalid form',
+                        previous: $e,
+                    );
+                }
+            },
+            )
+        );
+    }
+}
