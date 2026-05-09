@@ -19,6 +19,11 @@ class Email implements Primitive
         #[Assert\Email]
         public readonly string $value,
     ) {}
+
+    public static function validate(string $value): void
+    {
+        // validation logic
+    }
 }
 ```
 

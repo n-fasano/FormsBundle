@@ -9,7 +9,9 @@
             "email": "fasano.nm@gmail.com"
         }
     ],
+    "homepage": "https://github.com/n-fasano/FormsBundle",
     "require": {
+        "php": ">=8.4",
         "symfony/http-kernel": "^8.0",
         "symfony/dependency-injection": "^8.0",
         "symfony/form": "^8.0",
