@@ -4,7 +4,7 @@ Generate Symfony forms directly from your DTOs — no `FormType` classes needed.
 
 ## Contents
 
-- [Architecture](architecture.md) — data flow, configurator pipeline, directory structure
+- [Features](features.md) — type inference, nested objects, attributes overview, constraint enrichment, integrations
 - [Attributes](attributes.md) — full reference for `#[Form\...]` and `#[Field\...]` attributes
 - [Extensibility](extensibility.md) — custom field configurators, custom constraint configurators
 
