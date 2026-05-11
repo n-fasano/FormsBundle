@@ -70,17 +70,10 @@ class ContactFormType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'attr' => ['minlength' => 2, 'maxlength' => 100],
-                'required' => true,
-                'label' => 'Name',
             ])
-            ->add('email', EmailType::class, [
-                'required' => true,
-                'label' => 'Email',
-            ])
+            ->add('email', EmailType::class)
             ->add('message', TextareaType::class, [
                 'attr' => ['maxlength' => 1000],
-                'required' => true,
-                'label' => 'Message',
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Request',
@@ -93,8 +86,6 @@ class ContactFormType extends AbstractType
             'action' => $this->urlGenerator->generate('app.contact'),
             'method' => 'POST',
             'data_class' => ContactRequest::class,
-            'constraints' => [new Valid()],
-            'empty_data' => fn () => new ContactRequest('', '', null),
         ]);
     }
 }
